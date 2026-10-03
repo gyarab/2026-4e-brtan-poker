@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Poker Table</title>
+    <link rel="stylesheet" href="/static/styles.css?v=2026-10-02" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <h1>Poker Table</h1>
+        <div id="userSummary" class="user-summary">Nepřihlášen</div>
+      </header>
+
+      <main class="layout">
+        <section class="panel auth-panel">
+          <h2>Autentizace</h2>
+          <div class="auth-box">
+            <label for="username">Uživatelské jméno</label>
+            <input id="username" placeholder="např. alice" />
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="např. email@example.com" />
+            <label for="password">Heslo</label>
+            <input id="password" type="password" placeholder="min. 6 znaků" />
+            <div class="button-row">
+              <button id="registerBtn">Registrovat</button>
+              <button id="loginBtn" class="secondary">Přihlásit</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel room-panel">
+          <h2>Lobby</h2>
+          <div class="button-row">
+            <button id="refreshRoomsBtn">Obnovit místnosti</button>
+            <button id="createRoomBtn" class="secondary">Vytvořit místnost</button>
+          </div>
+          <div class="inline-fields">
+            <input id="roomName" placeholder="Jméno místnosti" />
+            <input id="maxPlayers" type="number" min="2" max="8" value="4" placeholder="Počet hráčů" />
+            <input id="smallBlind" type="number" min="1" value="10" placeholder="Small blind" />
+          </div>
+          <div class="room-list" id="roomList"></div>
+        </section>
+
+        <section class="panel game-panel">
+          <h2>Hra</h2>
+          <div class="button-row">
+            <button id="joinSelectedBtn">Připojit se</button>
+            <button id="startGameBtn">Spustit hand</button>
+            <button id="checkBtn">Check</button>
+            <button id="callBtn">Call</button>
+            <button id="raiseBtn">Raise</button>
+            <button id="foldBtn" class="danger">Fold</button>
+          </div>
+
+          <div class="raise-box">
+            <label for="raiseInput">Výše raise</label>
+            <input id="raiseInput" type="number" min="10" step="10" value="30" />
+          </div>
+
+          <div class="state-box">
+            <label>Vybraná místnost</label>
+            <div id="selectedRoomLabel">-</div>
+          </div>
+
+          <div class="poker-table">
+            <div class="table-header">
+              <div class="board" id="boardArea">Board: žádné karty</div>
+              <div class="pot" id="potArea">Pot: 0</div>
+            </div>
+            <div class="status" id="statusArea" aria-live="polite">Čekám na akci...</div>
+            <div class="table-seats" id="playersArea"></div>
+            <div class="history-box">
+              <div class="history-header">Akční log</div>
+              <ul id="actionLog" class="action-log"></ul>
+            </div>
+          </div>
+
+          <pre id="roomJson" class="json-box">{}</pre>
+        </section>
+      </main>
+    </div>
+
+    <script src="/static/script.js?v=2026-10-02"></script>
+  </body>
+</html>
