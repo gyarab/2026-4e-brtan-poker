@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#07100e" />
+    <title>Royal House — profil hráče</title>
+    <link rel="stylesheet" href="/static/styles.css?v=2026-10-05-responsive-4" />
+    <link rel="stylesheet" href="/static/profile.css?v=2026-10-04-final" />
+  </head>
+  <body class="profile-page">
+    <div class="profile-shell">
+      <header class="profile-header">
+        <a class="brand" href="/" aria-label="Royal House, úvodní stránka">
+          <span class="brand-mark" aria-hidden="true">♠</span>
+          <span class="brand-name">ROYAL <b>HOUSE</b><small>PLAYER PROFILE</small></span>
+        </a>
+        <div class="profile-header-user" id="profileHeaderUser">Profil hráče</div>
+        <a class="button button-quiet" href="/table">Zpět ke stolu <span aria-hidden="true">↗</span></a>
+      </header>
+
+      <main class="profile-main">
+        <section class="profile-hero">
+          <div class="profile-monogram" id="profileMonogram" aria-hidden="true">RH</div>
+          <div class="profile-identity">
+            <div class="section-kicker">Hráčský profil</div>
+            <h1 id="profileName">Načítám profil…</h1>
+            <p id="profileMessage" role="status" aria-live="polite">Načítám dlouhodobé statistiky a historii hand.</p>
+          </div>
+          <div class="profile-level"><span>Herní měna</span><strong>CHIPS</strong><small>bez reálných vkladů</small></div>
+        </section>
+
+        <section class="profile-stat-grid" aria-label="Přehled výsledků">
+          <article class="profile-stat"><span>Odehrané handy</span><strong id="statHands">0</strong><small id="statHandsWon">0 výher</small></article>
+          <article class="profile-stat"><span>Win rate</span><strong id="statWinRate">0 %</strong><small>výhry / handy</small></article>
+          <article class="profile-stat"><span>Čistý výsledek</span><strong id="statNetChips">0</strong><small>žetonů za všechny handy</small></article>
+          <article class="profile-stat"><span>Největší pot</span><strong id="statBiggestPot">0</strong><small id="statAveragePot">Průměr 0</small></article>
+        </section>
+
+        <div class="profile-content-grid">
+          <section class="profile-card performance-card">
+            <div class="profile-card-heading">
+              <div><div class="section-kicker">Vývoj stacku</div><h2>Výsledky v čase</h2></div>
+              <span class="profile-card-mark" aria-hidden="true">↗</span>
+            </div>
+            <div class="chips-chart" id="chipsChart" role="img" aria-label="Graf změny stacku v odehraných handách"></div>
+            <div class="chart-foot"><span>Začátek historie</span><span id="chartCurrent">0 žetonů</span></div>
+            <div class="profile-substats">
+              <div><span>VPIP</span><strong id="statVpip">0 %</strong></div>
+              <div><span>PFR</span><strong id="statPfr">0 %</strong></div>
+              <div><span>Průměrná délka</span><strong id="statDuration">0 s</strong></div>
+            </div>
+            <div class="decision-title">Rozhodnutí u stolu</div>
+            <div id="decisionBars" class="decision-bars"></div>
+          </section>
+
+          <section class="profile-card achievement-card">
+            <div class="profile-card-heading">
+              <div><div class="section-kicker">Milníky</div><h2>Ocenění</h2></div>
+              <span class="profile-card-mark" aria-hidden="true">✧</span>
+            </div>
+            <div id="achievementList" class="achievement-list" aria-live="polite"></div>
+          </section>
+
+          <section class="profile-card history-card profile-history-card">
+            <div class="profile-card-heading">
+              <div><div class="section-kicker">Osobní záznam</div><h2>Historie hand</h2></div>
+              <span class="profile-card-mark" aria-hidden="true">◷</span>
+            </div>
+            <div id="profileHands" class="profile-hands" aria-live="polite"></div>
+          </section>
+        </div>
+
+        <section id="replayCard" class="profile-card replay-card" hidden>
+          <div class="profile-card-heading">
+            <div><div class="section-kicker">Přehrání handy</div><h2 id="replayTitle">Hand #—</h2></div>
+            <button id="closeReplayBtn" class="icon-button" type="button" aria-label="Zavřít přehrání">×</button>
+          </div>
+          <div class="replay-stage">
+            <div class="replay-display">
+              <div id="replayPlayers" class="replay-players" aria-label="Pozice hráčů a stacky"></div>
+              <div class="replay-table"><div class="replay-pot" id="replayPot">POT · 0</div><div id="replayBoard" class="replay-board"></div></div>
+            </div>
+            <div class="replay-current-event"><span id="replayPhase">PREFLOP</span><strong id="replayMessage">Zvolte přehrání handy.</strong></div>
+          </div>
+          <div class="replay-controls">
+            <button id="replayPrevBtn" class="button button-quiet" type="button" aria-label="Předchozí událost">◀</button>
+            <button id="replayPlayBtn" class="button button-primary" type="button">Přehrát</button>
+            <button id="replayNextBtn" class="button button-quiet" type="button" aria-label="Další událost">▶</button>
+            <span id="replayStep" class="replay-step">0 / 0</span>
+          </div>
+          <ol id="replayTimeline" class="replay-timeline"></ol>
+        </section>
+
+        <div class="profile-status" id="profileStatus" role="status" aria-live="polite"></div>
+      </main>
+    </div>
+    <script src="/static/profile.js?v=2026-10-04-final"></script>
+  </body>
+</html>

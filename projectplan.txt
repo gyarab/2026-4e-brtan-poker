@@ -1,0 +1,593 @@
+ROADMAPA: BASE GAME → TOP-NOTCH POKER
+🟥 FÁZE 0 — Stabilizace základu
+Než začneš dělat crazy efekty, musí být 100% spolehlivý game engine.
+- kompletní Texas Hold'em logika
+- fold / check / call / bet / raise / all-in
+- správné minimální raise
+- správný pot
+- side pots
+- dealer button
+- SB / BB
+- správné pořadí hráčů
+- správný přechod:
+  - preflop
+  - flop
+  - turn
+  - river
+  - showdown
+- správné vyhodnocení hand
+- split pot
+- reconnect hráče
+- synchronizace přes WebSocket
+- ochrana proti double-clickům
+- ochrana proti akcím mimo tah
+Cíl: žádný bug, který by mohl změnit výsledek hry.
+🟧 FÁZE 1 — Kompletní redesign pokerového stolu
+Tady začne vizuální část.
+Poker table
+Místo obyčejného divu udělej skutečný 3D/2.5D feeling:
+- velký oválný stůl
+- felt textura
+- subtilní gradient
+- světelný glow kolem stolu
+- dealer button
+- pozice hráčů kolem stolu
+- chip stacks
+- karty
+- pot uprostřed
+Například:
+          [PLAYER 2]
+             🃏🃏
+          💰 1 250
+
+ [PLAYER 3]             [PLAYER 1]
+ 🃏🃏                    🃏🃏
+ 💰 840                   💰 2 340
+
+
+              💰 POT
+             € 3 420
+
+          [COMMUNITY]
+       🂡 🂫 🂧 🃏 🃏
+
+
+             YOU
+       🃏 🃏
+       💰 4 120
+
+Ale vizuálně mnohem propracovanější.
+🟨 FÁZE 2 — KARTY
+Karty budou jeden z nejdůležitějších prvků.
+Animace
+Při rozdávání:
+deck → karta vyletí → otočí se → přistane před hráčem
+Každá karta může mít:
+- 3D flip
+- shadow
+- glow
+- slight rotation
+- easing
+- bounce při dopadu
+Community cards
+Flop:
+🂡 → 🂫 → 🂧
+
+karty se objeví postupně.
+Turn:
+🂨
+
+River:
+🂭
+
+S každou kartou může být krátký:
+- camera zoom
+- table glow
+- sound
+- particle effect
+Ale krátký. Nemá to být Disney film pokaždé, když přijde karta.
+🟩 FÁZE 3 — CHIP ANIMATIONS
+Tohle může udělat obrovský rozdíl.
+Když hráč betne:
+PLAYER
+ ↓
+💰💰💰
+ ↓
+        → → →
+             POT
+
+Žetony fyzicky animovat do středu stolu.
+Při call:
+stack → několik chipů → pot
+Při all-in:
+větší stack chipů → dramatický přesun → ALL IN badge
+Při výhře:
+POT
+ ↓
+💰💰💰💰
+ ↙ ↓ ↘
+PLAYER
+
+Žetony se vrátí vítězi.
+🟦 FÁZE 4 — PLAYER STATES
+Každý hráč musí mít jasný vizuální stav.
+Normální
+PLAYER
+💰 1 240
+
+Je na tahu
+- glow kolem avataru
+- progress ring
+- timer
+- lehká pulzace
+Fold
+- karty se zahodí
+- avatar ztlumí
+- FOLDED
+All-in
+- výrazný badge
+- speciální animation
+- chip animation
+Winner
+- glow
+- winning hand
+- chip animation
+- krátká victory animation
+🟪 FÁZE 5 — TURN TIMER
+Každý hráč má například:
+20 sekund
+Kruh kolem avatara:
+       20
+    ╭─────╮
+   │ USER  │
+    ╰─────╯
+
+Postupně se vyprázdňuje.
+Například:
+20 → 10 → 5 → 3 → 2 → 1
+Posledních pár sekund:
+- intenzivnější UI
+- pulse
+- případně zvuk
+Po vypršení:
+automatická akce podle pravidel projektu, např. fold/check.
+🟫 FÁZE 6 — ACTION BAR
+Spodní část obrazovky bude hlavní ovládací centrum.
+Například:
+┌──────────────────────────────────────────────┐
+│                                              │
+│       FOLD    CHECK     CALL €250            │
+│                                              │
+│              RAISE                           │
+│        ───────────────                       │
+│       €250          €1000                    │
+│                                              │
+└──────────────────────────────────────────────┘
+
+Raise slider
+Musí být extrémně dobře udělaný.
+Preset buttons:
+- 2×
+- 2.5×
+- 3×
+- 4×
+- ½ pot
+- ¾ pot
+- Pot
+- All-in
+A zároveň:
+slider + ruční input
+🟦 FÁZE 7 — MICRO-ANIMATIONS
+Tady se aplikace začne cítit „premium“.
+Například:
+Hover
+Button:
+normal
+ ↓
+slight scale
+ ↓
+glow
+
+Click
+scale 1
+→ 0.96
+→ 1
+
+Pot update
+€1,200
+ ↓
+€1,450
+
+Číslo krátce zvýraznit.
+Stack
+1,200
+ ↓
+950
+
+Krátká animace.
+New card
+🂠
+ ↓
+flip
+ ↓
+🂡
+
+🔥 FÁZE 8 — SHOWDOWN
+Tohle bych udělal jako jeden z nejlepších momentů celé hry.
+Například:
+SHOWDOWN
+
+Karty hráčů se postupně otočí.
+Potom:
+FULL HOUSE
+K♠ K♥ K♦ 8♣ 8♦
+
+Vítězný hráč:
+- karty glow
+- hand name
+- highlight
+- pot animation
+Prohráli:
+- karty ztmavnou
+- případně zobrazit jejich kombinaci
+🧠 FÁZE 9 — ANALYTICKÝ PANEL
+Tvoje práce má oproti běžné pokerové hře jednu velkou výhodu:
+analytickou část.
+Udělil bych jí vlastní panel.
+Například:
+┌────────────────────────────┐
+│        HAND ANALYSIS       │
+├────────────────────────────┤
+│                            │
+│ WIN PROBABILITY             │
+│                            │
+│       67.4%                │
+│     ███████████░░          │
+│                            │
+│ DRAW                         │
+│ Flush draw                 │
+│                            │
+│ OUTS                        │
+│ 9                           │
+│                            │
+│ POT ODDS                    │
+│ 28.6%                       │
+│                            │
+└────────────────────────────┘
+
+🧮 FÁZE 10 — ADVANCED POKER ANALYTICS
+Tady může projekt působit opravdu technicky.
+Zobrazovat:
+- win probability
+- tie probability
+- lose probability
+- outs
+- pot odds
+- implied odds
+- current hand
+- possible draws
+- stronger possible hands
+- weaker hands
+- hands currently beating you
+Například:
+Your hand: Pair of Aces
+
+Currently beating you:
+- Two Pair
+- Three of a Kind
+- Straight
+- Flush
+- Full House
+- Four of a Kind
+- Straight Flush
+
+A analytika může říct:
+Estimated equity
+
+You       67.4%
+Opponent  32.6%
+
+🤖 FÁZE 11 — SIMULACE
+Pro pravděpodobnosti bych udělal Monte Carlo simulaci.
+Například:
+SIMULATING 100,000 HANDS...
+
+████████████████████ 100%
+
+WIN     67.42%
+TIE      1.84%
+LOSE    30.74%
+
+A zároveň:
+- počet simulací
+- execution time
+- confidence / approximation
+- počet soupeřů
+To je pro školní projekt velmi dobře obhajitelná technická část.
+📊 FÁZE 12 — PLAYER PROFILE
+Každý hráč by měl mít profil.
+┌─────────────────────────────────┐
+│           MATYÁŠ                │
+│                                 │
+│  HANDS PLAYED       1,248       │
+│  WIN RATE            18.4%      │
+│  VPIP                24.2%      │
+│  PFR                 17.8%      │
+│  AVG POT             842        │
+│                                 │
+│  TOTAL WON           42,840     │
+│  BIGGEST POT         8,420      │
+└─────────────────────────────────┘
+
+📈 FÁZE 13 — STATISTIKY
+Dashboard:
+Overview
+- Hands played
+- Hands won
+- Win rate
+- Total chips won/lost
+- Biggest pot
+- Average pot
+- Average hand duration
+Decision statistics
+- Fold %
+- Check %
+- Call %
+- Bet %
+- Raise %
+- All-in %
+Performance
+Grafy:
+Chips
+  │
+  │       ╭──╮
+  │    ╭──╯  ╰───╮
+  │────╯          ╰──
+  └────────────────────
+           Hands
+
+📜 FÁZE 14 — HAND HISTORY
+Každý hand uložit.
+Například:
+HAND #1284
+
+Texas Hold'em
+6 players
+
+Preflop
+BTN: Raise €200
+SB: Fold
+BB: Call
+
+Flop
+A♠ 7♦ 2♣
+
+BB: Check
+BTN: Bet €350
+BB: Call
+
+...
+
+Winner:
+BTN
+
+Winning hand:
+Pair of Aces
+
+Pot:
+€1,240
+
+A možnost:
+Replay Hand
+🎥 FÁZE 15 — HAND REPLAY
+Tohle by bylo velmi dobré pro projekt.
+Uživatel si otevře starou hru:
+◀ | ▶ | ▶▶ | ⏸
+
+A aplikace přehraje celý hand.
+- rozdání
+- akce
+- bety
+- flop
+- turn
+- river
+- showdown
+🏠 FÁZE 16 — LOBBY
+Lobby nesmí působit jako školní CRUD aplikace.
+Místo:
+Room 1
+Room 2
+Room 3
+
+udělej:
+Poker Lobby
+┌──────────────────────────────────────────┐
+│            TEXAS HOLD'EM                │
+│                                          │
+│   ┌──────────────┐ ┌──────────────┐     │
+│   │ HIGH ROLLER  │ │ NIGHT TABLE  │     │
+│   │              │ │              │     │
+│   │ 4 / 6        │ │ 2 / 6        │     │
+│   │ 100 / 200    │ │ 50 / 100     │     │
+│   │              │ │              │     │
+│   │    JOIN      │ │    JOIN      │     │
+│   └──────────────┘ └──────────────┘     │
+└──────────────────────────────────────────┘
+
+🏆 FÁZE 17 — ACHIEVEMENTS
+Pro extra polish:
+- First Win
+- First All-in
+- Royal Flush
+- Straight Flush
+- 10 Hands Played
+- 100 Hands Played
+- Comeback
+- Biggest Pot
+- Perfect Fold
+Ale nepřehánět to.
+🔊 FÁZE 18 — SOUND DESIGN
+Velmi podceňovaná část.
+Zvuky:
+- card shuffle
+- card deal
+- card flip
+- chip movement
+- chip stack
+- button click
+- check
+- call
+- bet
+- raise
+- all-in
+- fold
+- showdown
+- win
+A hlavně:
+sound settings
+Master Volume
+Music
+Effects
+UI
+
+🎵 FÁZE 19 — MUSIC
+Lobby:
+ambient poker music
+Hra:
+velmi subtilní background
+Showdown:
+krátký tension effect
+Winner:
+krátký victory sound
+Nikdy nedělat hudbu tak hlasitou, aby překážela hře.
+🌌 FÁZE 20 — PARTICLES / VFX
+Tady můžeš jít trochu „crazy“.
+Ale pouze u důležitých eventů:
+Royal Flush
+ROYAL FLUSH
+✨ ✨ ✨
+🂡 🂾 🂭 🂫 🂱
+
+- particles
+- glow
+- screen effect
+- special animation
+All-in
+- krátký screen shake
+- chip explosion
+- dramatic glow
+Big pot
+- pot pulse
+Winner
+- confetti / particles
+Normální check ale nesmí vypadat jako Marvel trailer.
+🎨 FÁZE 21 — THEMING
+Přidal bych několik stolů:
+Classic
+Green felt / gold
+Midnight
+Black / blue
+Casino
+Dark red / gold
+Neon
+Cyberpunk
+A hráč si vybere theme.
+📱 FÁZE 22 — RESPONSIVE
+Musí fungovat:
+- desktop
+- laptop
+- tablet
+- mobil
+Poker table se musí adaptovat.
+Na mobilu například:
+      opponent
+    🃏 🃏
+       💰
+
+ 🂡 🂫 🂧 🂨 🂭
+
+       POT
+
+      YOUR HAND
+       🃏 🃏
+
+ FOLD  CALL  RAISE
+
+🔐 FÁZE 23 — BACKEND / SECURITY
+Protože máš multiplayer:
+frontend nesmí rozhodovat o výsledku hry.
+Server musí být autorita.
+Server rozhoduje:
+- karty
+- RNG
+- turn
+- bet
+- raise
+- pot
+- winner
+- stack
+- game state
+Frontend pouze:
+zobrazuje stav + posílá akci.
+Tohle je zároveň velmi dobrý bod k obhajobě projektu.
+🧪 FÁZE 24 — AUTOMATICKÉ TESTY
+Vytvořit testovací scénáře:
+1000+ simulovaných handů
+Kontrolovat invarianty:
+TOTAL CHIPS BEFORE
+=
+TOTAL CHIPS AFTER
+
+Nikdy nesmí vzniknout žetony z ničeho.
+Testovat:
+- random hands
+- random actions
+- all-ins
+- side pots
+- split pots
+- disconnects
+- reconnects
+- invalid actions
+🏁 FÁZE 25 — FINÁLNÍ POLISH
+Nakonec bych udělal tzv. polish pass.
+Projít každý detail:
+- spacing
+- typography
+- shadows
+- gradients
+- border radius
+- hover states
+- loading states
+- empty states
+- error states
+- animations
+- transitions
+- sounds
+- responsiveness
+- accessibility
+- performance
+A hlavně:
+žádné konzolové errory.
+⭐ Výsledná architektura
+Ve finále by aplikace měla mít zhruba:
+                    POKER APP
+                        │
+        ┌───────────────┼───────────────┐
+        │               │               │
+      LOBBY            GAME           PROFILE
+        │               │               │
+    Rooms          Poker Table       Stats
+    Create         Cards             History
+    Join           Chips             Achievements
+                   Actions
+                   Timer
+                   VFX
+                      │
+                ┌─────┴─────┐
+                │           │
+             ANALYTICS    WEBSOCKET
+                │           │
+          Probability    Multiplayer
+          Simulation     Sync
+          Pot Odds
+          Outs

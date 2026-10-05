@@ -1,91 +1,235 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="cs">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-    <title>Poker Table</title>
-    <link rel="stylesheet" href="/static/styles.css?v=2026-10-02" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#07100e" />
+    <title>Royal House — Texas Hold’em</title>
+    <link rel="stylesheet" href="/static/styles.css?v=2026-10-05-responsive-4" />
   </head>
-  <body>
+  <body class="table-page">
     <div class="app-shell">
-      <header class="topbar">
-        <h1>Poker Table</h1>
-        <div id="userSummary" class="user-summary">Nepřihlášen</div>
+      <header class="app-header">
+        <a class="brand" href="/" aria-label="Royal House, úvodní stránka">
+          <span class="brand-mark" aria-hidden="true">♠</span>
+          <span class="brand-name">ROYAL <b>HOUSE</b><small>FRIENDS TABLES</small></span>
+        </a>
+        <div class="header-table-status">
+          <span class="live-indicator"><i></i> LIVE TABLE</span>
+          <span class="header-divider"></span>
+          <span id="selectedRoomLabel" class="table-name">Vyberte stůl</span>
+        </div>
+        <div class="header-user">
+          <a class="header-profile-link" href="/profile">Profil & statistiky</a>
+          <span class="connection-dot" aria-hidden="true"></span>
+          <span id="userSummary">Nepřihlášen</span>
+        </div>
       </header>
 
-      <main class="layout">
-        <section class="panel auth-panel">
-          <h2>Autentizace</h2>
-          <div class="auth-box">
-            <label for="username">Uživatelské jméno</label>
-            <input id="username" placeholder="např. alice" />
-            <label for="email">Email</label>
-            <input id="email" type="email" placeholder="např. email@example.com" />
-            <label for="password">Heslo</label>
-            <input id="password" type="password" placeholder="min. 6 znaků" />
-            <div class="button-row">
-              <button id="registerBtn">Registrovat</button>
-              <button id="loginBtn" class="secondary">Přihlásit</button>
+      <main class="game-layout">
+        <aside class="side-panel lobby-panel" aria-label="Účet a lobby">
+          <section class="panel-section auth-section">
+            <div class="section-kicker">Váš účet</div>
+            <h1 class="panel-title">Vstupte ke stolu</h1>
+            <div class="auth-box">
+              <label for="username">Přezdívka</label>
+              <input id="username" autocomplete="username" placeholder="např. riverking" />
+              <label for="email">E-mail</label>
+              <input id="email" type="email" autocomplete="email" placeholder="jmeno@email.cz" />
+              <label for="password">Heslo</label>
+              <input id="password" type="password" autocomplete="current-password" placeholder="Alespoň 6 znaků" />
+              <div class="auth-actions">
+                <button id="loginBtn" class="button button-primary">Přihlásit</button>
+                <button id="registerBtn" class="button button-quiet">Vytvořit účet</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel-section rooms-section">
+            <div class="section-heading">
+              <div>
+                <div class="section-kicker">Vyberte si hru</div>
+                <h2 class="panel-title">Lobby <span class="count-badge" id="roomCount">0</span></h2>
+              </div>
+              <button id="refreshRoomsBtn" class="icon-button" aria-label="Obnovit seznam stolů" title="Obnovit">↻</button>
+            </div>
+            <div id="roomList" class="room-list" aria-live="polite"></div>
+            <div class="create-room-fields">
+              <label for="roomName">Vytvořit herní stůl</label>
+              <input id="roomName" maxlength="100" placeholder="Název stolu" />
+              <div class="field-pair">
+                <div>
+                  <label for="maxPlayers">Místa</label>
+                  <input id="maxPlayers" type="number" min="2" max="9" value="6" />
+                </div>
+                <div>
+                  <label for="smallBlind">Small blind</label>
+                  <input id="smallBlind" type="number" min="1" max="1000" value="10" />
+                </div>
+              </div>
+              <button id="createRoomBtn" class="button button-outline">＋ Vytvořit stůl</button>
+            </div>
+          </section>
+          <div class="sidebar-footnote"><span>♢</span> Hrajte zodpovědně. Zde se používají herní žetony.</div>
+        </aside>
+
+        <section class="table-column" aria-label="Pokerový stůl">
+          <div class="table-toolbar">
+            <div class="table-heading">
+              <div class="section-kicker">Texas Hold’em · No limit</div>
+              <h2 id="tableHeading">Vyberte stůl v lobby</h2>
+            </div>
+            <div class="table-meta">
+              <span class="meta-chip"><span class="meta-icon">◉</span> <span id="blindLabel">10 / 20</span></span>
+              <span class="meta-chip"><span class="meta-icon">♙</span> <span id="playerCountLabel">0 / 6</span></span>
+              <span class="phase-chip" id="analysisStage">ČEKÁNÍ</span>
+            </div>
+          </div>
+
+          <div class="table-frame">
+            <div class="poker-table" id="tableSurface">
+              <div class="table-rail" aria-hidden="true"></div>
+              <div class="table-felt" aria-hidden="true"></div>
+              <div class="table-inner-line" aria-hidden="true"></div>
+              <div class="table-watermark" aria-hidden="true"><span>♠</span><small>ROYAL HOUSE</small></div>
+              <div id="deckOrigin" class="deck-origin" aria-hidden="true"><i></i><i></i><span>R</span></div>
+              <div id="playersArea" class="table-seats" aria-live="polite" aria-label="Hráči u stolu"></div>
+              <div class="community-area">
+                <div id="potArea" class="pot-display"><span class="pot-label">POT</span><strong>0</strong><small>žetonů</small></div>
+                <div id="boardArea" class="board-area" aria-label="Společné karty">
+                  <span class="board-empty">Společné karty se objeví zde</span>
+                </div>
+              </div>
+              <div class="table-caption"><span>RH</span> THE FRIENDS' GAME</div>
+            </div>
+          </div>
+
+          <div class="table-feedback">
+            <div id="statusArea" class="status-message" role="status" aria-live="polite">
+              Přihlaste se a vyberte stůl, nebo vytvořte nový.
+            </div>
+            <div class="table-actions">
+              <button id="joinSelectedBtn" class="button button-quiet">Připojit se ke stolu</button>
+              <button id="startGameBtn" class="button button-primary">Rozdat karty</button>
             </div>
           </div>
         </section>
 
-        <section class="panel room-panel">
-          <h2>Lobby</h2>
-          <div class="button-row">
-            <button id="refreshRoomsBtn">Obnovit místnosti</button>
-            <button id="createRoomBtn" class="secondary">Vytvořit místnost</button>
-          </div>
-          <div class="inline-fields">
-            <input id="roomName" placeholder="Jméno místnosti" />
-            <input id="maxPlayers" type="number" min="2" max="8" value="4" placeholder="Počet hráčů" />
-            <input id="smallBlind" type="number" min="1" value="10" placeholder="Small blind" />
-          </div>
-          <div class="room-list" id="roomList"></div>
-        </section>
-
-        <section class="panel game-panel">
-          <h2>Hra</h2>
-          <div class="button-row">
-            <button id="joinSelectedBtn">Připojit se</button>
-            <button id="startGameBtn">Spustit hand</button>
-            <button id="checkBtn">Check</button>
-            <button id="callBtn">Call</button>
-            <button id="raiseBtn">Raise</button>
-            <button id="foldBtn" class="danger">Fold</button>
-          </div>
-
-          <div class="raise-box">
-            <label for="raiseInput">Výše raise</label>
-            <input id="raiseInput" type="number" min="10" step="10" value="30" />
-          </div>
-
-          <div class="state-box">
-            <label>Vybraná místnost</label>
-            <div id="selectedRoomLabel">-</div>
-          </div>
-
-          <div class="poker-table">
-            <div class="table-header">
-              <div class="board" id="boardArea">Board: žádné karty</div>
-              <div class="pot" id="potArea">Pot: 0</div>
+        <aside class="side-panel details-panel" aria-label="Informace o hře">
+          <section class="detail-card analysis-card">
+            <div class="card-heading">
+              <div>
+                <div class="section-kicker">Živý přehled</div>
+                <h2>Analýza handy</h2>
+              </div>
+              <span class="analysis-symbol" aria-hidden="true">✧</span>
             </div>
-            <div class="status" id="statusArea" aria-live="polite">Čekám na akci...</div>
-            <div class="table-seats" id="playersArea"></div>
-            <div class="history-box">
-              <div class="history-header">Akční log</div>
-              <ul id="actionLog" class="action-log"></ul>
+            <div class="equity-meter" aria-label="Odhad equity">
+              <div class="equity-track"><span id="equityTrackFill"></span></div>
+              <div class="equity-copy"><span>Odhad equity</span><strong id="analysisWin">—</strong></div>
             </div>
-          </div>
+            <div class="analysis-stats">
+              <div><span>Výhra</span><strong id="analysisWinProbability">—</strong></div>
+              <div><span>Remíza</span><strong id="analysisDraw">—</strong></div>
+              <div><span>Prohra</span><strong id="analysisLose">—</strong></div>
+              <div><span>Outs</span><strong id="analysisOuts">—</strong></div>
+              <div><span>Pot odds</span><strong id="analysisPotOdds">—</strong></div>
+              <div><span>Implied odds</span><strong id="analysisImpliedOdds">—</strong></div>
+            </div>
+            <p id="analysisImpliedNote" class="analysis-note implied-note">Odhad další hodnoty potu.</p>
+            <div class="analysis-current">
+              <span>Aktuální kombinace</span><strong id="analysisHand">—</strong>
+              <small id="analysisDrawType">Bez výrazného draw</small>
+            </div>
+            <div class="analysis-current analysis-range" aria-label="Hypotetické kombinace soupeřů, které by měly silnější handu">
+              <span>Možné silnější handy</span><strong id="analysisHandsAhead">Po flopu</strong>
+              <small id="analysisHandsAheadNote">Hypotetické kombinace z neznámých karet.</small>
+            </div>
+            <button id="simulateEquityBtn" class="button button-quiet simulation-button" type="button" disabled>Simulovat 100 000 hand</button>
+            <div id="simulationProgress" class="simulation-progress" hidden>
+              <div class="simulation-progress-heading"><span id="simulationStatus" role="status" aria-live="polite">Připravuji simulaci…</span><strong id="simulationPercent">0 %</strong></div>
+              <div class="simulation-track" role="progressbar" aria-label="Průběh Monte Carlo simulace" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="simulationProgressFill"></span></div>
+            </div>
+            <p id="analysisNote" class="analysis-note">Odhad podle známých karet.</p>
+          </section>
 
-          <pre id="roomJson" class="json-box">{}</pre>
-        </section>
+          <section class="detail-card history-card">
+            <div class="card-heading">
+              <div>
+                <div class="section-kicker">Průběh hry</div>
+                <h2>Historie handy</h2>
+              </div>
+              <span class="history-mark" aria-hidden="true">◷</span>
+            </div>
+            <ul id="handHistoryList" class="hand-history-list" aria-live="polite"></ul>
+            <div class="log-divider"></div>
+            <div class="section-kicker recent-kicker">Poslední akce</div>
+            <ul id="actionLog" class="action-log" aria-live="polite"></ul>
+          </section>
+
+          <details class="debug-details">
+            <summary>Technické detaily stolu</summary>
+            <pre id="roomJson">{}</pre>
+          </details>
+          <details class="sound-settings">
+            <summary>Vzhled a zvuk</summary>
+            <div class="settings-fields">
+              <label for="themeSelect">Motiv stolu</label>
+              <select id="themeSelect">
+                <option value="classic">Classic · zelený felt</option>
+                <option value="midnight">Midnight · modrý</option>
+                <option value="casino">Casino · vínový</option>
+                <option value="neon">Neon · elektrický</option>
+              </select>
+              <label for="cardSkinSelect">Vzhled karet</label>
+              <select id="cardSkinSelect">
+                <option value="classic">Classic · slonová kost</option>
+                <option value="gold">Gold · zlatý okraj</option>
+                <option value="midnight">Midnight · tmavý líc</option>
+              </select>
+              <label for="masterVolume">Hlavní hlasitost <span id="masterVolumeLabel">35 %</span></label>
+              <input id="masterVolume" type="range" min="0" max="100" value="35" />
+              <label for="effectsVolume">Zvukové efekty <span id="effectsVolumeLabel">45 %</span></label>
+              <input id="effectsVolume" type="range" min="0" max="100" value="45" />
+              <label for="musicVolume">Ambientní hudba <span id="musicVolumeLabel">0 %</span></label>
+              <input id="musicVolume" type="range" min="0" max="100" value="0" />
+              <p>Hudba i zvuky začnou až po vašem prvním ovládání stolu.</p>
+            </div>
+          </details>
+        </aside>
       </main>
-    </div>
 
-    <script src="/static/script.js?v=2026-10-02"></script>
+      <footer class="action-dock" aria-label="Herní akce">
+        <div class="action-context">
+          <span class="your-turn-mark" aria-hidden="true">✦</span>
+          <div><strong>Vaše akce</strong><small id="actionHint">Vyčkejte na svůj tah</small></div>
+        </div>
+        <div class="action-buttons">
+          <button id="foldBtn" class="button button-fold" disabled>Složit</button>
+          <button id="checkBtn" class="button button-dark" disabled>Check</button>
+          <button id="callBtn" class="button button-dark" disabled>Call <span id="callAmountLabel"></span></button>
+          <button id="allInBtn" class="button button-allin" disabled>All-in</button>
+        </div>
+        <div class="raise-control">
+          <div class="raise-topline"><label for="raiseInput">Raise</label><strong><span id="raiseAmountLabel">30</span> žetonů</strong></div>
+          <input id="raiseSlider" type="range" min="10" max="500" step="10" value="30" aria-label="Výše raisu" />
+          <div class="raise-bottomline">
+            <input id="raiseInput" type="number" min="10" step="1" value="30" aria-label="Vlastní výše raisu" />
+            <div class="raise-presets" aria-label="Předvolby raisu">
+              <button type="button" class="preset-btn" data-multiplier="2">2×</button>
+              <button type="button" class="preset-btn" data-multiplier="2.5">2,5×</button>
+              <button type="button" class="preset-btn" data-multiplier="3">3×</button>
+              <button type="button" class="preset-btn" data-multiplier="4">4×</button>
+              <button type="button" class="preset-btn" data-pot="0.5">½ pot</button>
+              <button type="button" class="preset-btn" data-pot="0.75">¾ pot</button>
+              <button type="button" class="preset-btn" data-pot="1">Pot</button>
+              <button type="button" class="preset-btn preset-allin" data-action="all_in">All-in</button>
+            </div>
+          </div>
+          <button id="raiseBtn" class="button button-raise" disabled><span id="raiseActionLabel">Vsadit</span> <span aria-hidden="true">↗</span></button>
+        </div>
+      </footer>
+    </div>
+    <script src="/static/script.js?v=2026-10-05-responsive-3"></script>
   </body>
 </html>

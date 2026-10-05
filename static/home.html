@@ -3,120 +3,134 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Poker Table | Home</title>
-    <link rel="stylesheet" href="/static/styles.css?v=2026-10-02" />
+    <meta name="theme-color" content="#0c120e" />
+    <meta name="description" content="Royal House Poker — Texas Hold'em pro přátele, živá hra a přehledná analytika." />
+    <title>Royal House Poker — stůl čeká</title>
+    <link rel="stylesheet" href="/static/styles.css?v=2026-10-05-responsive-4" />
     <style>
-      .landing {
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        padding: 32px 16px;
-      }
-
-      .landing-card {
-        width: min(720px, 100%);
-        background: rgba(15, 23, 42, 0.88);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 22px;
-        padding: 32px 24px;
-        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
-      }
-
-      .eyebrow {
-        color: #fbbf24;
-        font-weight: 700;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        font-size: 0.72rem;
-      }
-
-      h1 {
-        font-size: clamp(2.2rem, 5vw, 4rem);
-        margin: 14px 0 12px;
-      }
-
-      .lead {
-        color: #cbd5e1;
-        line-height: 1.7;
-        margin-bottom: 22px;
-      }
-
-      .cta-row {
-        display: flex;
-        gap: 12px;
-        flex-wrap: wrap;
-      }
-
-      .cta-row a {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 12px 18px;
-        border-radius: 12px;
-        text-decoration: none;
-        font-weight: 700;
-      }
-
-      .primary {
-        background: #14b8a6;
-        color: #03110f;
-      }
-
-      .secondary {
-        background: #f59e0b;
-        color: #1f2937;
-      }
-
-      .feature-grid {
-        margin-top: 28px;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 12px;
-      }
-
-      .feature {
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 12px;
-        padding: 14px;
-      }
-
-      .feature strong {
-        display: block;
-        margin-bottom: 6px;
-      }
+      :root { color-scheme: dark; }
+      * { box-sizing: border-box; }
+      body.landing-page { position: relative; min-height: 100vh; margin: 0; overflow-x: hidden; isolation: isolate; color: #ece9dc; background: #0c120e; font-family: Inter, "Segoe UI", sans-serif; }
+      .landing-page::before { position: fixed; inset: 0; z-index: -1; background: radial-gradient(ellipse at 72% 39%, rgba(95, 118, 69, .17), transparent 37%), radial-gradient(ellipse at 14% 82%, rgba(176, 136, 66, .08), transparent 32%), linear-gradient(130deg, #121a14, #0b100d 65%); content: ""; }
+      .landing-shell { width: min(1240px, calc(100% - 64px)); min-height: 100vh; display: flex; flex-direction: column; margin: 0 auto; }
+      .landing-nav { height: 92px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(218, 210, 178, .1); }
+      .landing-brand { display: flex; align-items: center; gap: 13px; color: #e6dfca; text-decoration: none; }
+      .landing-brand-mark { width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid rgba(207, 183, 120, .55); border-radius: 50%; color: #ddc987; font-family: Georgia, serif; font-size: 23px; box-shadow: inset 0 0 0 4px rgba(207, 183, 120, .06); }
+      .landing-brand strong { display: block; font-family: Georgia, serif; font-size: 14px; font-weight: 500; letter-spacing: .19em; text-transform: uppercase; }
+      .landing-brand small { display: block; margin-top: 4px; color: #819083; font-size: 8px; letter-spacing: .18em; text-transform: uppercase; }
+      .landing-nav-links { display: flex; align-items: center; gap: 28px; }
+      .landing-nav-links a { color: #9da89a; font-size: 11px; text-decoration: none; transition: color .2s ease; }
+      .landing-nav-links a:hover { color: #ead59e; }
+      .landing-nav-links .nav-enter { padding: 10px 15px; border: 1px solid rgba(207, 183, 120, .34); border-radius: 999px; color: #e2d3a4; background: rgba(190, 160, 96, .07); }
+      .landing-hero { flex: 1; display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: clamp(36px, 7vw, 100px); padding: 65px 0 72px; }
+      .landing-copy { max-width: 570px; }
+      .landing-kicker { display: flex; align-items: center; gap: 10px; color: #c8b477; font-size: 9px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; }
+      .landing-kicker::before { width: 25px; height: 1px; background: #b79b59; content: ""; }
+      .landing-copy h1 { margin: 20px 0 18px; color: #f1eee3; font-family: Georgia, "Times New Roman", serif; font-size: clamp(44px, 6vw, 76px); font-weight: 400; letter-spacing: -.045em; line-height: .99; }
+      .landing-copy h1 span { color: #d6c187; font-style: italic; }
+      .landing-lead { max-width: 465px; margin: 0; color: #9da89b; font-size: 14px; line-height: 1.8; }
+      .landing-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 13px; margin-top: 31px; }
+      .landing-cta { min-height: 47px; display: inline-flex; align-items: center; justify-content: center; gap: 14px; padding: 0 20px; border: 1px solid transparent; border-radius: 7px; color: #1c2118; background: linear-gradient(135deg, #e4d29c, #b49a5e); box-shadow: 0 7px 25px rgba(167, 137, 74, .14); font-size: 11px; font-weight: 750; text-decoration: none; transition: transform .2s ease, box-shadow .2s ease; }
+      .landing-cta:hover { transform: translateY(-2px); box-shadow: 0 11px 30px rgba(167, 137, 74, .25); }
+      .landing-cta span { font-size: 16px; }
+      .landing-docs { padding: 12px 8px; color: #929d90; font-size: 10px; text-decoration: none; }
+      .landing-docs:hover { color: #d9ca9d; }
+      .landing-trust { display: flex; gap: 25px; margin-top: 45px; padding-top: 20px; border-top: 1px solid rgba(218, 210, 178, .1); }
+      .landing-trust div { display: grid; gap: 5px; }
+      .landing-trust strong { color: #ded8c5; font-family: Georgia, serif; font-size: 14px; font-weight: 400; }
+      .landing-trust small { color: #778378; font-size: 8px; letter-spacing: .08em; text-transform: uppercase; }
+      .landing-stage { position: relative; min-height: 430px; display: grid; place-items: center; perspective: 1000px; }
+      .stage-halo { position: absolute; width: min(85%, 410px); aspect-ratio: 1; border: 1px solid rgba(194, 169, 107, .1); border-radius: 50%; box-shadow: 0 0 80px rgba(91, 118, 72, .1), inset 0 0 70px rgba(91, 118, 72, .05); }
+      .stage-halo::before, .stage-halo::after { position: absolute; inset: 8%; border: 1px solid rgba(194, 169, 107, .08); border-radius: inherit; content: ""; }
+      .stage-halo::after { inset: -9%; border-style: dashed; opacity: .45; }
+      .preview-table { position: relative; width: min(100%, 500px); aspect-ratio: 1.3; transform: rotateX(9deg) rotateZ(-3deg); filter: drop-shadow(0 35px 35px rgba(0, 0, 0, .4)); }
+      .preview-rail { position: absolute; inset: 0; border: 9px solid #79643c; border-radius: 50%; background: linear-gradient(140deg, #c9b178, #4f452f 24%, #927849 52%, #453c2c 78%, #b9a16b); box-shadow: inset 0 2px 2px rgba(255,255,255,.25), 0 0 32px rgba(142, 122, 73, .15); }
+      .preview-rail::before { position: absolute; inset: 5px; border: 1px solid rgba(240, 224, 174, .4); border-radius: inherit; content: ""; }
+      .preview-felt { position: absolute; inset: 5.5% 4%; display: grid; place-items: center; overflow: hidden; border: 1px solid rgba(209, 191, 137, .24); border-radius: 50%; background: radial-gradient(ellipse at 49% 36%, #345340, #18372a 63%, #11291f); box-shadow: inset 0 0 50px rgba(0,0,0,.35); }
+      .preview-felt::before { position: absolute; inset: 8%; border: 1px solid rgba(214, 196, 137, .2); border-radius: inherit; content: ""; }
+      .preview-logo { color: rgba(217, 197, 140, .11); font-family: Georgia, serif; font-size: clamp(26px, 4vw, 44px); letter-spacing: .17em; text-transform: uppercase; }
+      .preview-pot { position: absolute; top: 50%; left: 50%; display: grid; gap: 4px; justify-items: center; transform: translate(-50%, -50%); }
+      .preview-pot small { color: #d9c98e; font-size: 7px; letter-spacing: .23em; }
+      .preview-pot strong { color: #f0e7c7; font-family: Georgia, serif; font-size: 19px; font-weight: 400; }
+      .preview-cards { display: flex; gap: 5px; margin-top: 5px; }
+      .preview-card { width: 38px; height: 54px; display: grid; align-content: space-between; justify-items: center; padding: 5px 3px; border: 1px solid #d7d4c6; border-radius: 4px; color: #18221b; background: linear-gradient(140deg, #fffef7, #d9d8ce); box-shadow: 0 6px 12px rgba(0,0,0,.3); font-family: Georgia, serif; font-size: 13px; }
+      .preview-card span:last-child { font-size: 16px; }
+      .preview-card.red { color: #a24439; }
+      .preview-card:nth-child(1), .preview-card:nth-child(5) { transform: translateY(5px) rotate(-5deg); }
+      .preview-card:nth-child(2), .preview-card:nth-child(4) { transform: translateY(-2px) rotate(2deg); }
+      .preview-player { position: absolute; z-index: 1; min-width: 104px; display: flex; align-items: center; gap: 8px; padding: 7px 10px; border: 1px solid rgba(204, 190, 145, .16); border-radius: 999px; background: rgba(11, 19, 14, .88); box-shadow: 0 8px 18px rgba(0,0,0,.22); }
+      .preview-player.top { top: -9%; left: 50%; transform: translateX(-50%); }
+      .preview-player.bottom { bottom: -9%; left: 50%; border-color: rgba(208, 187, 122, .36); box-shadow: 0 0 20px rgba(206, 175, 99, .1); transform: translateX(-50%); }
+      .preview-player.left { top: 45%; left: -12%; }
+      .preview-player.right { top: 45%; right: -12%; }
+      .preview-avatar { width: 26px; height: 26px; display: grid; place-items: center; border: 1px solid rgba(196, 178, 123, .28); border-radius: 50%; color: #d8c48c; background: #25372a; font-family: Georgia, serif; font-size: 12px; }
+      .preview-player span:last-child { display: grid; gap: 2px; }
+      .preview-player strong { color: #e6e4d8; font-size: 8px; font-weight: 600; }
+      .preview-player small { color: #a99b6d; font-size: 7px; }
+      .landing-footer { display: flex; justify-content: space-between; gap: 16px; padding: 18px 0 22px; border-top: 1px solid rgba(218, 210, 178, .1); color: #647166; font-size: 8px; letter-spacing: .06em; }
+      .landing-footer span:last-child { color: #93875f; }
+      a:focus-visible { outline: 2px solid #d7c17d; outline-offset: 4px; }
+      @media (max-width: 850px) { .landing-shell { width: min(700px, calc(100% - 36px)); } .landing-nav { height: 76px; } .landing-nav-links { gap: 15px; } .landing-hero { grid-template-columns: 1fr; gap: 20px; padding: 55px 0 48px; } .landing-copy { max-width: 620px; } .landing-stage { min-height: 370px; } .preview-table { width: min(90%, 460px); } }
+      @media (max-width: 480px) { .landing-shell { width: calc(100% - 30px); } .landing-brand strong { font-size: 11px; } .landing-brand small { font-size: 7px; } .landing-nav-links { gap: 0; } .landing-nav-links a:first-child { display: none; } .landing-nav-links .nav-enter { padding: 9px 11px; font-size: 9px; } .landing-copy h1 { font-size: clamp(43px, 13vw, 60px); } .landing-lead { font-size: 12px; } .landing-stage { min-height: 285px; margin: 4px -7px 0; } .preview-table { width: 95%; } .preview-rail { border-width: 6px; } .preview-player { min-width: 87px; gap: 5px; padding: 5px 7px; } .preview-player.left { left: -5%; } .preview-player.right { right: -5%; } .preview-avatar { width: 22px; height: 22px; } .preview-player strong { font-size: 7px; } .preview-player small { font-size: 6px; } .preview-card { width: 29px; height: 43px; } .preview-cards { gap: 3px; } .landing-trust { gap: 13px; justify-content: space-between; margin-top: 30px; } .landing-trust strong { font-size: 12px; } .landing-trust small { font-size: 7px; } .landing-footer { flex-direction: column; align-items: flex-start; } }
+      @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
     </style>
   </head>
-  <body>
-    <div class="landing">
-      <div class="landing-card">
-        <div class="eyebrow">Texas Hold'em</div>
-        <h1>Online poker table</h1>
-        <p class="lead">
-          Vstup do lobby, vytvoření místnosti, připojení druhého hráče a skutečná hra na stole.
-          Přehledné karty, dealer, blindy, na tahu a správné call / raise / fold chování.
-        </p>
+  <body class="landing-page">
+    <div class="landing-shell">
+      <header class="landing-nav">
+        <a class="landing-brand" href="/" aria-label="Royal House Poker — domů">
+          <span class="landing-brand-mark" aria-hidden="true">♠</span>
+          <span><strong>Royal House</strong><small>Poker for friends</small></span>
+        </a>
+        <nav class="landing-nav-links" aria-label="Hlavní navigace">
+          <a href="#experience">Zážitek</a>
+          <a href="/docs">API</a>
+          <a class="nav-enter" href="/table">Otevřít lobby <span aria-hidden="true">↗</span></a>
+        </nav>
+      </header>
 
-        <div class="cta-row">
-          <a class="primary" href="/table">Přejít ke hře</a>
-          <a class="secondary" href="/docs">API docs</a>
-        </div>
+      <main class="landing-hero" id="experience">
+        <section class="landing-copy" aria-labelledby="hero-title">
+          <div class="landing-kicker">Texas Hold'em · multiplayer</div>
+          <h1 id="hero-title">Klid u stolu.<br /><span>Napětí v ruce.</span></h1>
+          <p class="landing-lead">Pokerové stoly pro přátele, živá hra v reálném čase a analytika, která vám pomůže číst každé rozhodnutí. Vyberte stůl v lobby a rozehrajte další hand.</p>
+          <div class="landing-actions">
+            <a class="landing-cta" href="/table">Vstoupit do lobby <span aria-hidden="true">→</span></a>
+            <a class="landing-docs" href="/profile">Můj hráčský profil</a>
+          </div>
+          <div class="landing-trust" aria-label="Vlastnosti hry">
+            <div><strong>2–9</strong><small>hráčů u stolu</small></div>
+            <div><strong>Realtime</strong><small>WebSocket hra</small></div>
+            <div><strong>Fair play</strong><small>serverová logika</small></div>
+          </div>
+        </section>
 
-        <div class="feature-grid">
-          <div class="feature">
-            <strong>Real-time</strong>
-            Aktualizace stavu po každé akci.
+        <section class="landing-stage" aria-label="Ukázka pokerového stolu">
+          <div class="stage-halo" aria-hidden="true"></div>
+          <div class="preview-table" aria-hidden="true">
+            <div class="preview-rail"></div>
+            <div class="preview-felt">
+              <div class="preview-logo">Royal House</div>
+              <div class="preview-pot">
+                <small>POT · HAND #028</small><strong>2 450</strong>
+                <div class="preview-cards">
+                  <div class="preview-card"><span>A</span><span>♠</span></div>
+                  <div class="preview-card red"><span>K</span><span>♥</span></div>
+                  <div class="preview-card"><span>Q</span><span>♣</span></div>
+                  <div class="preview-card red"><span>J</span><span>♦</span></div>
+                  <div class="preview-card"><span>10</span><span>♠</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="preview-player top"><span class="preview-avatar">M</span><span><strong>MIKE</strong><small>1 840 žetonů</small></span></div>
+            <div class="preview-player left"><span class="preview-avatar">A</span><span><strong>ANNA</strong><small>3 210 žetonů</small></span></div>
+            <div class="preview-player right"><span class="preview-avatar">J</span><span><strong>JAKUB</strong><small>980 žetonů</small></span></div>
+            <div class="preview-player bottom"><span class="preview-avatar">Y</span><span><strong>VÁŠ TAH</strong><small>Dealer · 2 600</small></span></div>
           </div>
-          <div class="feature">
-            <strong>Turn logic</strong>
-            Dealer, SB, BB a správné pořadí tahu.
-          </div>
-          <div class="feature">
-            <strong>Responsive</strong>
-            Funguje i na mobilu.
-          </div>
-        </div>
-      </div>
+        </section>
+      </main>
+
+      <footer class="landing-footer"><span>© Royal House Poker · Texas Hold'em pro přátele</span><span>Hra o žetony · Bez skutečných peněz</span></footer>
     </div>
   </body>
 </html>

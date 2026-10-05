@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Optional
 
 from fastapi import Depends, HTTPException, status
@@ -16,7 +16,12 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+    if len(plain_password.encode("utf-8")) > 72:
+        return False
+    try:
+        return pwd_context.verify(plain_password, hashed_password)
+    except (TypeError, ValueError):
+        return False
 
 
 def get_password_hash(password: str) -> str:
@@ -25,7 +30,7 @@ def get_password_hash(password: str) -> str:
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
     to_encode = data.copy()
-    expire = datetime.utcnow() + (
+    expire = datetime.now(timezone.utc) + (
         expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     )
     to_encode.update({"exp": expire})
@@ -37,11 +42,14 @@ def get_user_by_token(token: str) -> Optional[User]:
         return None
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        user_id: int = payload.get("sub")
-        if user_id is None:
+        subject = payload.get("sub")
+        if subject is None or isinstance(subject, bool):
+            return None
+        user_id = int(subject)
+        if user_id <= 0:
             return None
         return User(id=user_id)
-    except JWTError:
+    except (JWTError, TypeError, ValueError):
         return None
 
 
@@ -55,10 +63,13 @@ async def get_current_user(
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        user_id: int = payload.get("sub")
-        if user_id is None:
+        subject = payload.get("sub")
+        if subject is None or isinstance(subject, bool):
             raise credentials_exception
-    except JWTError as exc:
+        user_id = int(subject)
+        if user_id <= 0:
+            raise credentials_exception
+    except (JWTError, TypeError, ValueError) as exc:
         raise credentials_exception from exc
 
     user = db.query(User).filter(User.id == user_id).first()
